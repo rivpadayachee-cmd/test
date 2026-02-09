@@ -1,0 +1,79 @@
+Thanks for the screenshots, Rivaal — I can see you’re in your GitHub repo (rivpadayachee-cmd/test) and your GitHub Pages deployment is stuck in “queued.” Let’s walk through exactly what you need to do next to fix it and get your site live.
+
+✅ Step-by-Step Fix for GitHub Pages Deployment
+🔧 Step 1: Enable GitHub Pages
+- Go to your repo’s Settings tab.
+- Scroll down to Pages (left sidebar).
+- Under Source, select:
+- Branch: main (or gh-pages if you’re using that)
+- Folder: /root or /docs (depending on where your HTML files are)
+- Click Save.
+
+🛠️ Step 2: Create a Simple index.html
+- In your repo, click Add file → Create new file.
+- Name it index.html.
+- Paste this sample code:
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Maths App</title>
+</head>
+<body>
+  <h1>Welcome to Rivaal’s Maths Resource</h1>
+  <p>This is a test deployment using GitHub Pages.</p>
+</body>
+</html>
+- Scroll down and click Commit new file.
+
+⚙️ Step 3: Check Deployment Status
+- Go to the Actions tab.
+- Look for a workflow called pages-build-deployment.
+- If it’s stuck:
+- Click into it.
+- Cancel the job.
+- Re-run it manually.
+
+🧠 Step 4: Add a Workflow File (if missing)
+If you don’t have .github/workflows/pages.yml, create one:
+- Click Add file → Create new file.
+- Name it .github/workflows/pages.yml.
+- Paste this:
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
+- Commit the file.
+
+🚀 Final Step: Push a Change
+- Edit your index.html or README and push the change.
+- This will trigger the workflow and deploy your site.
+
+Once this is done, your site should be live at:
+https://rivpadayachee-cmd.github.io/test/
+
+
+Let me know what kind of content you want to show on the homepage — I can help you design it next.
