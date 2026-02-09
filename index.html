@@ -1,79 +1,243 @@
-Thanks for the screenshots, Rivaal — I can see you’re in your GitHub repo (rivpadayachee-cmd/test) and your GitHub Pages deployment is stuck in “queued.” Let’s walk through exactly what you need to do next to fix it and get your site live.
+"use client";
 
-✅ Step-by-Step Fix for GitHub Pages Deployment
-🔧 Step 1: Enable GitHub Pages
-- Go to your repo’s Settings tab.
-- Scroll down to Pages (left sidebar).
-- Under Source, select:
-- Branch: main (or gh-pages if you’re using that)
-- Folder: /root or /docs (depending on where your HTML files are)
-- Click Save.
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Heart } from "lucide-react";
 
-🛠️ Step 2: Create a Simple index.html
-- In your repo, click Add file → Create new file.
-- Name it index.html.
-- Paste this sample code:
-<!DOCTYPE html>
-<html>
-<head>
-  <title>My Maths App</title>
-</head>
-<body>
-  <h1>Welcome to Rivaal’s Maths Resource</h1>
-  <p>This is a test deployment using GitHub Pages.</p>
-</body>
-</html>
-- Scroll down and click Commit new file.
+export default function ValentinePage() {
+  const [noCount, setNoCount] = useState(0);
+  const [yesPressed, setYesPressed] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-⚙️ Step 3: Check Deployment Status
-- Go to the Actions tab.
-- Look for a workflow called pages-build-deployment.
-- If it’s stuck:
-- Click into it.
-- Cancel the job.
-- Re-run it manually.
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-🧠 Step 4: Add a Workflow File (if missing)
-If you don’t have .github/workflows/pages.yml, create one:
-- Click Add file → Create new file.
-- Name it .github/workflows/pages.yml.
-- Paste this:
-name: Deploy to GitHub Pages
+  const handleNoClick = () => {
+    setNoCount(noCount + 1);
+  };
 
-on:
-  push:
-    branches: [main]
+  const getNoButtonText = () => {
+    const phrases = [
+      "No",
+      "Are you sure?",
+      "Really sure?",
+      "Think again!",
+      "Last chance!",
+      "Surely not?",
+      "You might regret this!",
+      "Give it another thought!",
+      "Are you absolutely sure?",
+      "This could be a mistake!",
+      "Have a heart!",
+      "Don't be so cold!",
+      "Change of heart?",
+      "Wouldn't you reconsider?",
+      "Is that your final answer?",
+      "You're breaking my heart ;(",
+    ];
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    return phrases[Math.min(noCount, phrases.length - 1)];
+  };
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  const yesButtonSize = noCount * 20 + 16;
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
+  if (!mounted) return null;
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: .
+  if (yesPressed) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFF0F5] text-center px-6 overflow-hidden relative">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.8,
+            type: "spring",
+            stiffness: 100,
+          }}
+          className="z-10"
+        >
+          <img
+            src="https://raw.createusercontent.com/7befc23b-7302-4425-861f-e5580e7e03fb/"
+            alt="Cute teddy bear jumping"
+            className="w-48 h-48 md:w-64 md:h-64 mx-auto mb-8 rounded-2xl shadow-lg border-4 border-white"
+          />
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
-- Commit the file.
+          <h1 className="text-5xl md:text-7xl font-sacramento text-[#FF1493] mb-8 drop-shadow-sm">
+            Yay!!! Happy Valentine's Day! ❤️
+          </h1>
 
-🚀 Final Step: Push a Change
-- Edit your index.html or README and push the change.
-- This will trigger the workflow and deploy your site.
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="max-w-lg bg-white/80 backdrop-blur-sm p-10 rounded-[40px] shadow-2xl border-2 border-pink-200 relative"
+          >
+            <div className="absolute -top-6 -left-6 transform -rotate-12">
+              <Heart
+                fill="#FF69B4"
+                className="text-[#FF69B4] w-12 h-12 opacity-50"
+              />
+            </div>
+            <div className="absolute -bottom-6 -right-6 transform rotate-12">
+              <Heart
+                fill="#FF69B4"
+                className="text-[#FF69B4] w-12 h-12 opacity-50"
+              />
+            </div>
 
-Once this is done, your site should be live at:
-https://rivpadayachee-cmd.github.io/test/
+            <p className="text-2xl md:text-3xl font-dancing-script text-gray-800 leading-relaxed italic">
+              "Bhavna, you are absolutely amazing. Every moment with you feels
+              like a beautiful melody. Your kindness, your smile, and the way
+              you make everything better just by being there... it's magical.
+              I'm so incredibly lucky to have you. You're my favorite person in
+              the whole wide world!"
+            </p>
 
+            <div className="mt-8 text-[#FF1493] font-sacramento text-4xl">
+              - Forever Yours ❤️
+            </div>
+          </motion.div>
+        </motion.div>
 
-Let me know what kind of content you want to show on the homepage — I can help you design it next.
+        {/* Floating hearts animation */}
+        <div className="fixed inset-0 pointer-events-none">
+          {[...Array(25)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-pink-400"
+              initial={{
+                top: "110%",
+                left: `${Math.random() * 100}%`,
+                scale: Math.random() * 0.5 + 0.5,
+                opacity: 1,
+              }}
+              animate={{
+                top: "-10%",
+                opacity: [1, 1, 0],
+                rotate: 360,
+                x: [0, Math.random() * 100 - 50, 0],
+              }}
+              transition={{
+                duration: Math.random() * 4 + 3,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+                ease: "linear",
+              }}
+            >
+              <Heart fill="currentColor" size={Math.random() * 20 + 10} />
+            </motion.div>
+          ))}
+        </div>
+
+        <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Dancing+Script:wght@400;700&display=swap');
+          
+          .font-sacramento {
+            font-family: 'Sacramento', cursive;
+          }
+          .font-dancing-script {
+            font-family: 'Dancing Script', cursive;
+          }
+
+          @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+          }
+          .animate-pulse-slow {
+            animation: pulse-slow 3s infinite ease-in-out;
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFF0F5] overflow-hidden px-4 relative">
+      {/* Decorative Hearts in background */}
+      <div className="absolute top-10 left-10 opacity-20 animate-pulse-slow">
+        <Heart size={100} fill="#FFB6C1" className="text-[#FFB6C1]" />
+      </div>
+      <div
+        className="absolute bottom-10 right-10 opacity-20 animate-pulse-slow"
+        style={{ animationDelay: "1.5s" }}
+      >
+        <Heart size={120} fill="#FFB6C1" className="text-[#FFB6C1]" />
+      </div>
+
+      <motion.div
+        className="text-center z-10"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="relative inline-block mb-8">
+          <img
+            src="https://raw.createusercontent.com/7befc23b-7302-4425-861f-e5580e7e03fb/"
+            alt="Cute teddy bear"
+            className="w-56 h-56 md:w-72 md:h-72 mx-auto rounded-3xl shadow-xl border-4 border-white"
+          />
+          <motion.div
+            className="absolute -top-4 -right-4"
+            animate={{ rotate: [0, 15, -15, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            <Heart fill="#FF1493" className="text-[#FF1493] w-12 h-12" />
+          </motion.div>
+        </div>
+
+        <h1 className="text-4xl md:text-6xl font-sacramento text-[#FF1493] mb-12 px-4 drop-shadow-sm">
+          Will you be my Valentine, Bhavna? 🌹
+        </h1>
+
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 min-h-[100px]">
+          <motion.button
+            className="bg-[#32CD32] hover:bg-[#228B22] text-white font-bold py-3 px-8 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center"
+            style={{
+              fontSize: Math.min(yesButtonSize, 120),
+              padding: `${Math.max(12, yesButtonSize / 3)}px ${Math.max(32, yesButtonSize)}px`,
+            }}
+            onClick={() => setYesPressed(true)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Yes!
+          </motion.button>
+
+          <motion.button
+            onClick={handleNoClick}
+            className="bg-[#FF4500] hover:bg-[#CC3700] text-white font-bold py-3 px-8 rounded-full shadow-lg text-xl transition-all duration-300"
+            whileHover={{ x: [0, -5, 5, -5, 5, 0] }}
+            transition={{ duration: 0.4 }}
+          >
+            {getNoButtonText()}
+          </motion.button>
+        </div>
+      </motion.div>
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Dancing+Script:wght@400;700&display=swap');
+        
+        body {
+          margin: 0;
+          background-color: #FFF0F5;
+        }
+
+        .font-sacramento {
+          font-family: 'Sacramento', cursive;
+        }
+        .font-dancing-script {
+          font-family: 'Dancing Script', cursive;
+        }
+
+        @keyframes pulse-slow {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 4s infinite ease-in-out;
+        }
+      `}</style>
+    </div>
+  );
+}
